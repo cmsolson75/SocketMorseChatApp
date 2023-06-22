@@ -1,6 +1,7 @@
 import socket
 from threading import Thread
 
+from morse import *
 
 class ClientBackend:
 
@@ -40,7 +41,11 @@ class ClientBackend:
                 if not data:
                     print("Disconnected from server")
                     return
-                print(data.decode("UTF-8"))
+                message = data.decode("UTF-8")
+                print(message)
+                morse_thread = Thread(target=output_morse, args=(message,))
+                morse_thread.start()
+
             except:
                 print("Disconnected from server: error")
                 return
@@ -55,13 +60,6 @@ class ClientBackend:
 
 user = ClientBackend()
 user.assign_user_name()
-user.connect_to_server("10.0.0.125", 12345)
+user.connect_to_server("127.0.0.1", 12345)
 user.start_recieve_thread()
 user.start_input_loop()
-
-
-# server starts
-# client connects
-# client disconnects
-# 
-# client connects again
