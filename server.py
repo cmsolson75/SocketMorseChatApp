@@ -29,13 +29,16 @@ class ClientNode:
 
     def recieve_messages(self):
         while self.run_threads:
-            client_message = self.client_socket.recv(1024)
-            if not client_message:
-                self.connection_manager.send_all(self.user_name + " left the chat", self)
-                self.connection_manager.destroy_client(self)
-                return
-            client_message = client_message.decode("UTF-8")
-            self.connection_manager.send_all(self.user_name + ": " + client_message, self)
+            try:
+                client_message = self.client_socket.recv(1024)
+                if not client_message:
+                    self.connection_manager.send_all(self.user_name + " left the chat", self)
+                    self.connection_manager.destroy_client(self)
+                    return
+                client_message = client_message.decode("UTF-8")
+                self.connection_manager.send_all(self.user_name + ": " + client_message, self)
+            except OSError as e:
+                print("Error: " ,e)
 
                      
     def send_message(self, message):
@@ -53,8 +56,11 @@ class ConnectionMannager:
     def bind_socket(self, IP, PORT):
         try:
             self.socket.bind((IP, PORT))
-        except:
-            print("Address Taken")
+        except OSError as e:
+            if e.errno == 48:
+                print("Address already in use. Please try a different IP or PORT.")
+            else:
+                print("Error occurred while binding the socket:", e)
 
     def create_client(self, client_socket):
         client = ClientNode(client_socket, self)
@@ -62,25 +68,21 @@ class ConnectionMannager:
         client.assign_user_name_thread()
         client.start_recieve_thread()
 
-
-    
+ 
     def socket_listen(self):
-        # Probobly Need to Thread this!!!!!!!
         while True:
             self.socket.listen(1)
             client_socket, _ = self.socket.accept()
             self.create_client(client_socket)
-            # self.send_all("message")
-            # print(client.user_name)
             print(self.clients)
 
-    def destroy_client(self, object):
-        len_clients = len(self.clients)
-        for index in range(len_clients):
-            if self.clients[index] == object:
-                # print(f'USER: {self.clients[index]} Removed')
-                self.clients[index].run_threads = False
-                del self.clients[index]
+
+    def destroy_client(self, client_to_destroy):
+        if client_to_destroy in self.clients:
+            client_to_destroy.run_threads = False
+            self.clients.remove(client_to_destroy)
+            del client_to_destroy
+
 
     def send_all(self, message, current_client):
         for client in self.clients:
@@ -103,11 +105,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # server = ConnectionMannager()
-    # server.bind_socket("0.0.0.0", 12345)
-    # try:
-    #     server.socket_listen()
-    # finally:
-    #     for client in server.clients:
-    #         client.client_socket.close()
-    #     server.socket.close()

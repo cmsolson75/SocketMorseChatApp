@@ -15,7 +15,6 @@ class ClientBackend:
     
     def assign_user_name(self):
         # this takes the user name before we send it to the server
-        # prediction: front end thing
         self.user_name = input("username: ")
 
     def send_user_name(self) -> str:
@@ -33,6 +32,9 @@ class ClientBackend:
     def start_recieve_thread(self):
         self.recieve_thread = Thread(target=self.recieve_messages)
         self.recieve_thread.start()
+
+    def start_morse_thread(self):
+        pass
 
     def recieve_messages(self):
         while True:
