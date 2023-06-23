@@ -1,5 +1,9 @@
 # Socket Morse Chat App
 
+## Authors 
+- [cmsolson75](https://github.com/cmsolson75)
+- [1deolson](https://github.com/1deolson)
+
 ## Description
 
 Socket Morse Chat App is a socket chat application that enables users to send Morse code to each other. It is built using Python and works in a client-server architecture.
