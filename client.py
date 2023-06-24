@@ -1,7 +1,7 @@
 import socket
 from threading import Thread
 
-from morse import *
+from morse import output_morse
 
 class ClientBackend:
 
