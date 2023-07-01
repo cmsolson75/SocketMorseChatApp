@@ -22,14 +22,14 @@ The project consists of three main files:
 
 Make sure you have Python installed on your machine. Then, clone this repository to your local machine:
 
-```bash
+```
 git clone https://github.com/cmsolson75/SocketMorseChatApp.git
 cd socket-morse-chat-app
 ```
 
 Next, you will need to install the necessary dependencies. This project requires the `playsound` library:
 
-```bash
+```
 pip install playsound
 pip install PyObjC
 ```
@@ -40,7 +40,7 @@ pip install PyObjC
 
 To start the server, run:
 
-```bash
+```
 python server.py
 ```
 
@@ -50,7 +50,7 @@ This will start a server listening on IP "0.0.0.0" and port 12345.
 
 To connect to the server as a client, run:
 
-```bash
+```
 python client.py
 ```
 
