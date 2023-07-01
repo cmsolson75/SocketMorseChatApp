@@ -31,7 +31,7 @@ Next, you will need to install the necessary dependencies. This project requires
 
 ```bash
 pip install playsound
-pip3 install PyObjC
+pip install PyObjC
 ```
 
 ## Usage
